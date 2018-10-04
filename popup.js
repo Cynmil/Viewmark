@@ -16,4 +16,5 @@
 
   updateList(options);
   updatePagination(options);
+  $('.collapsible').collapsible();
 })();
