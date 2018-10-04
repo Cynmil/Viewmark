@@ -59,6 +59,7 @@ function bringBackBtnList(parent, btnList){
 
 // Saving new viewmark into local storage
 function saveNewInfo(name, tabs, options){
+  console.log('saving', name);
   let tab_urls = [];
   tabs.forEach(function(tab){
     tab_urls.push(tab.url);
@@ -88,13 +89,19 @@ function updateList(options){
       return;
     }
 
-    viewList.innerHTML = ''
+    viewList.innerHTML = '';
 
     let startIndex = (options.currentPage - 1) * options.maxNumOfViewmarksPerPage;
     let endIndex = options.currentPage * options.maxNumOfViewmarksPerPage - 1;
+    let tabLink;
 
     for (let i = startIndex; i <= endIndex && i < data.viewList.length; i++){
-      viewList.innerHTML += `<li class="collection-item">${data['viewList'][i]['title']}<a id="deleteBtn${i}" class="secondary-content" href="#"><i class="material-icons">delete</i></a><a id="tabBtn${i}" class="secondary-content" href="#"><i class="material-icons">tab</i></a></li>`;
+      tabLink = document.createElement('li');
+      tabLink.style = 'margin: 0';
+      tabLink.appendChild(createMainViewmarkElement(data.viewList[i].title, i));
+      tabLink.appendChild(createViewAllTabsElement(data.viewList[i].urls))
+
+      viewList.appendChild(tabLink);
     }
 
     for (let i = startIndex; i <= endIndex && i < data.viewList.length; i++){
@@ -111,6 +118,25 @@ function updateList(options){
       });
     }
   });
+}
+
+function createViewAllTabsElement(urls){
+  colpsBody = document.createElement('div');
+  colpsBody.className = 'collapsible-body';
+  urlList = document.createElement('ul');
+  urlList.className = 'collection';
+  urls.forEach(function(url){
+    urlList.innerHTML += `<li class="collection-item">${url}</li>`;
+  });
+  colpsBody.appendChild(urlList);
+  return colpsBody;
+}
+
+function createMainViewmarkElement(title, index){
+  mainElm = document.createElement('div');
+  mainElm.className = 'collapsible-header';
+  mainElm.innerHTML = `${title}<a id="tabBtn${index}" class="secondary-content" href="#" style="margin-left:230px"><i class="material-icons">tab</i></a><a id="deleteBtn${index}" class="secondary-content" href="#"><i class="material-icons">delete</i></a>`;
+  return mainElm;
 }
 
 // Updates the pagination panel
@@ -257,6 +283,10 @@ function addBtnEventListeners(options){
   const settingBtn = document.querySelector('.btn-floating.blue');
 
   bookmarkBtn.addEventListener('click', saveNewViewmark);
+
+  sortBtn.addEventListener('click', function(){
+    for (let i = 100; i < 200; i++){saveNewInfo(i.toString(), [{url: 'https://google.com'}], options);}
+  });
 
   settingBtn.addEventListener('click', function(){
     chrome.storage.local.clear();
