@@ -5,7 +5,7 @@ This chrome extension saves all the opened tabs of the curret window of the Goog
 ## Installation
 
 1. Download the zip file from this repository.
-![image](images/download_as_Zip.png?raw=True)
+![image](images/Download_as_Zip.PNG?raw=True)
 2. Unzip the file anywhere in the computer.
 3. Go to [chrome extension page](chrome://extensions) in the Google Chrome.
 4. Enable the developer's mode and load the folder you got from unzipping the file. 
